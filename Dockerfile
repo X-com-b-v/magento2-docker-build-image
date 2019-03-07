@@ -1,8 +1,9 @@
 FROM php:7.1
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
-RUN apt-get update \
-  && apt-get install -yq \
+RUN apt-get update;
+
+RUN apt-get install -y \
     ssh \
     rsync \
     mysql-client \
@@ -13,6 +14,20 @@ RUN apt-get update \
     libpng-dev \
     libxslt1-dev \
     git-core
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends libssh2-1-dev; \
+	pecl install ssh2-1.1.2; \
+	docker-php-ext-enable ssh2
+
+RUN pecl install ssh2-1.1.2; \
+    docker-php-ext-enable ssh2
+
+#install Imagemagick & PHP Imagick ext
+RUN apt-get update && apt-get install -y \
+        libmagickwand-dev --no-install-recommends
+RUN pecl install imagick && docker-php-ext-enable imagick
 
 RUN docker-php-ext-configure \
   gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
