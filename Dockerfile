@@ -1,4 +1,4 @@
-FROM php:7.1
+FROM php:7.2
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
