@@ -1,4 +1,4 @@
-FROM php:7.2
+FROM php:7.2-fpm-buster
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -6,20 +6,18 @@ RUN apt-get update;
 RUN apt-get install -y \
     ssh \
     rsync \
-    mysql-client \
+    libsodium-dev \
+    libxslt1-dev \
+    default-mysql-client \
     libfreetype6-dev \
     libicu-dev \
     libjpeg62-turbo-dev \
-    libmcrypt-dev \
     libpng-dev \
-    libxslt1-dev \
     git-core
 
 RUN set -eux; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends libssh2-1-dev; \
-	pecl install ssh2-1.1.2; \
-	docker-php-ext-enable ssh2
+	apt-get install -y --no-install-recommends libssh2-1-dev
 
 RUN pecl install ssh2-1.1.2; \
     docker-php-ext-enable ssh2
@@ -32,14 +30,29 @@ RUN pecl install imagick && docker-php-ext-enable imagick
 RUN docker-php-ext-configure \
   gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 
+RUN apt-get install -y libmcrypt-dev \
+    && pecl install mcrypt-1.0.2 \
+    && docker-php-ext-enable mcrypt
+
 RUN docker-php-ext-install \
   bcmath \
+  bz2 \
+  calendar \
+  exif \
   gd \
+  gettext \
   intl \
   mbstring \
-  mcrypt \
+  mysqli \
+  opcache \
+  pcntl \
   pdo_mysql \
   soap \
+  sockets \
+  sodium \
+  sysvmsg \
+  sysvsem \
+  sysvshm \
   xsl \
   zip
 
@@ -60,9 +73,5 @@ ENV PHP_PM_START_SERVERS 4
 ENV PHP_PM_MIN_SPARE_SERVERS 2
 ENV PHP_PM_MAX_SPARE_SERVERS 6
 ENV APP_MAGE_MODE default
-
-COPY conf/www.conf /usr/local/etc/php-fpm.d/
-COPY conf/php.ini /usr/local/etc/php/
-COPY conf/php-fpm.conf /usr/local/etc/
 
 WORKDIR /var/www/html
