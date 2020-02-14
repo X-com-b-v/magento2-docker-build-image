@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-buster
+FROM php:7.2
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -64,14 +64,8 @@ ENV NVM_DIR /usr/local/nvm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh
 
-ENV NODE_PATH $NVM_DIR/lib/node_modules
-ENV PHP_MEMORY_LIMIT 2G
-ENV PHP_PORT 9000
-ENV PHP_PM dynamic
-ENV PHP_PM_MAX_CHILDREN 10
-ENV PHP_PM_START_SERVERS 4
-ENV PHP_PM_MIN_SPARE_SERVERS 2
-ENV PHP_PM_MAX_SPARE_SERVERS 6
-ENV APP_MAGE_MODE default
+COPY conf/www.conf /usr/local/etc/php-fpm.d/
+COPY conf/php.ini /usr/local/etc/php/
+COPY conf/php-fpm.conf /usr/local/etc/
 
 WORKDIR /var/www/html
