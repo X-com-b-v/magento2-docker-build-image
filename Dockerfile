@@ -1,4 +1,4 @@
-FROM php:7.2
+FROM php:7.3
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -6,6 +6,8 @@ RUN apt-get update;
 RUN apt-get install -y \
     ssh \
     rsync \
+    libzip-dev \
+    zip \
     libsodium-dev \
     libxslt1-dev \
     default-mysql-client \
@@ -19,8 +21,10 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends libssh2-1-dev
 
-RUN pecl install ssh2-1.1.2; \
-    docker-php-ext-enable ssh2
+RUN curl http://pecl.php.net/get/ssh2-1.2.tgz -o ssh2.tgz && \
+    pecl install ssh2 ssh2.tgz && \
+    docker-php-ext-enable ssh2 && \
+    rm -rf ssh2.tgz
 
 #install Imagemagick & PHP Imagick ext
 RUN apt-get update && apt-get install -y \
