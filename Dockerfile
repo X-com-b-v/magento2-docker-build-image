@@ -68,6 +68,9 @@ ENV NVM_DIR /usr/local/nvm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh
 
+#https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
+SHELL ["/bin/bash", "--login", "-c"]
+
 COPY conf/www.conf /usr/local/etc/php-fpm.d/
 COPY conf/php.ini /usr/local/etc/php/
 COPY conf/php-fpm.conf /usr/local/etc/
