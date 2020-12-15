@@ -1,4 +1,4 @@
-FROM php:7.3
+FROM php:7.4
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -32,11 +32,7 @@ RUN apt-get update && apt-get install -y \
 RUN pecl install imagick && docker-php-ext-enable imagick
 
 RUN docker-php-ext-configure \
-  gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-
-RUN apt-get install -y libmcrypt-dev \
-    && pecl install mcrypt-1.0.2 \
-    && docker-php-ext-enable mcrypt
+  gd --with-freetype --with-jpeg
 
 RUN docker-php-ext-install \
   bcmath \
@@ -46,7 +42,6 @@ RUN docker-php-ext-install \
   gd \
   gettext \
   intl \
-  mbstring \
   mysqli \
   opcache \
   pcntl \
