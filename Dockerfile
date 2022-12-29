@@ -1,4 +1,4 @@
-FROM php:7.4
+FROM php:8.1
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -21,7 +21,7 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends libssh2-1-dev
 
-RUN curl http://pecl.php.net/get/ssh2-1.2.tgz -o ssh2.tgz && \
+RUN curl http://pecl.php.net/get/ssh2-1.3.1.tgz -o ssh2.tgz && \
     pecl install ssh2 ssh2.tgz && \
     docker-php-ext-enable ssh2 && \
     rm -rf ssh2.tgz
