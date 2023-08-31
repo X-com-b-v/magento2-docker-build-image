@@ -22,7 +22,7 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends libssh2-1-dev
 
 RUN curl http://pecl.php.net/get/ssh2-1.2.tgz -o ssh2.tgz && \
-    pecl install ssh2 ssh2.tgz && \
+    pecl install ssh2-1.2 ssh2.tgz && \
     docker-php-ext-enable ssh2 && \
     rm -rf ssh2.tgz
 
@@ -59,8 +59,9 @@ RUN curl -sS https://getcomposer.org/installer | \
   php -- --install-dir=/usr/local/bin --filename=composer
 
 ENV NVM_DIR /usr/local/nvm
+RUN mkdir -p "$NVM_DIR"
 
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash \
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.39.5/install.sh | bash \
     && . $NVM_DIR/nvm.sh
 
 #https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
