@@ -1,4 +1,4 @@
-FROM php:8.1
+FROM php:8.2
 MAINTAINER X-com B.V. <magento@x-com.nl>
 
 RUN apt-get update;
@@ -21,8 +21,8 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends libssh2-1-dev
 
-RUN curl http://pecl.php.net/get/ssh2-1.3.1.tgz -o ssh2.tgz && \
-    pecl install ssh2 ssh2.tgz && \
+RUN curl https://pecl.php.net/get/ssh2-1.4.1.tgz -o ssh2.tgz && \
+    pecl install ssh2-1-4 ssh2.tgz && \
     docker-php-ext-enable ssh2 && \
     rm -rf ssh2.tgz
 
@@ -60,7 +60,8 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 ENV NVM_DIR /usr/local/nvm
 
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash \
+RUN mkdir -p "$NVM_DIR"
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.39.7/install.sh | bash \
     && . $NVM_DIR/nvm.sh
 
 #https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
